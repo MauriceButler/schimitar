@@ -11,8 +11,14 @@ function arrayValidation(data, schema){
         data.pop();
     }
 
-    for (var i = 0; i < data.length; i++) {
-        process(data[i], schema.items[i]);
+    var itemSchemas
+
+    for(var i = 0; i < data.length; i++) {
+        process(data[i], 
+            Array.isArray(schema.items) ? 
+            schema.items[i] : 
+            schema.items
+        );
     }
 }
 

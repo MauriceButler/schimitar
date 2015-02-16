@@ -18,6 +18,13 @@ var test = require('tape'),
                                 type:'string'
                             }
                         }
+                    },
+                    baz:{
+                        type: 'array',
+                        items: {
+                            type: 'string'
+                        },
+                        maxItems: 2
                     }
                 }
             }
@@ -85,6 +92,25 @@ test('deletes additional items', function(t){
                 bar: {
                     thing: 'another string'
                 }
+            }
+        ];
+
+    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+});
+
+test('deletes additional items single type', function(t){
+    t.plan(1);
+
+    var data = [
+            'a string',
+            {
+                baz: ['foo', 'bar', 'baz']
+            }
+        ],
+        expectedResult = [
+            'a string',
+            {
+                baz: ['foo', 'bar']
             }
         ];
 
