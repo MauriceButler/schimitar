@@ -1,0 +1,2 @@
+# schimitar
+Naive schema cutter
