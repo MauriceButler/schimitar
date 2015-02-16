@@ -1,44 +1,45 @@
-var JaySchema = require('jayschema'),
-    jayschema = new JaySchema(),
-    clone = require('clone'),
-    contextBaseRegex = /#\//;
+var clone = require('clone');
 
-function getBase(target, keyArray){
-    var base;
+function arrayValidation(data, schema){
+    var length = schema.maxItems || schema.items.length;
 
-    for (var i = 0; i < keyArray.length; i++) {
-        if(base){
-            base = base[keyArray[i]];
-        } else {
-            base = target[keyArray[i]];
-        }
+    if(!Array.isArray(data)){
+        return data;
     }
 
-    return base;
+    while(data.length > length){
+        data.pop();
+    }
+
+    for (var i = 0; i < data.length; i++) {
+        process(data[i], schema.items[i]);
+    }
 }
 
-function fix(data, schema, callback){
-    var result = clone(data);
+function objectValidation(data, schema){
+    if(!data || typeof data !== 'object'){
+        return data;
+    }
 
-    jayschema.validate(data, schema, function(validationErrors){
-            var cantFix = [];
-
-            if(validationErrors){
-                for (var i = 0; i < validationErrors.length; i++) {
-                    if(validationErrors[i].constraintName === 'additionalProperties'){
-                        var contextParts = validationErrors[i].instanceContext.replace(contextBaseRegex, '').split('/');
-                        delete getBase(result, contextParts)[validationErrors[i].testedValue];
-                    } else {
-                        cantFix.push(validationErrors[i]);
-                    }
-                }
-            }
-
-            callback(cantFix.length ? cantFix : null, result);
+    for(var key in data){
+        if(schema.additionalProperties === false && !(key in schema.properties)){
+            delete data[key];
+        } else {
+            process(data[key], schema.properties[key]);
         }
-    );
+    }
 }
 
+function process(data, schema){
+    if(schema.type === 'array'){
+        arrayValidation(data, schema);
+    }else if(schema.type === 'object'){
+        objectValidation(data, schema);
+    }
 
-module.exports = fix;
+    return data;
+}
 
+module.exports = function(data, schema){
+    return process(clone(data), schema);
+};

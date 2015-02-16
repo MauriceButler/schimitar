@@ -28,7 +28,7 @@ var test = require('tape'),
 
 
 test('Doesn\'t mess with stuff if OK', function(t){
-    t.plan(2);
+    t.plan(1);
 
     var data = [
             'a string',
@@ -39,14 +39,11 @@ test('Doesn\'t mess with stuff if OK', function(t){
             }
         ];
 
-    fix(data, testSchema, function(error, result){
-        t.notOk(error, 'no error');
-        t.deepEqual(result, data, 'got correct result');
-    });
+    t.deepEqual(fix(data, testSchema), data, 'got correct result');
 });
 
 test('deletes additional props', function(t){
-    t.plan(2);
+    t.plan(1);
 
     var data = [
             'a string',
@@ -66,62 +63,24 @@ test('deletes additional props', function(t){
             }
         ];
 
-    fix(data, testSchema, function(error, result){
-        t.notOk(error, 'no error');
-        t.deepEqual(result, expectedResult, 'got correct result');
-    });
+    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
 });
 
-test('returns additional errors', function(t){
-    t.plan(2);
+
+test('deletes additional items', function(t){
+    t.plan(1);
 
     var data = [
-            123,
+            'a string',
             {
                 bar: {
                     thing: 'another string'
                 }
-            }
-        ],
-        expectedError = [
-            {
-                constraintName: 'type',
-                constraintValue: 'string',
-                instanceContext: '#/0',
-                resolutionScope: 'anon-schema://d0282df19787a42c749164ea965c5f9bab0e6784/#/items/0',
-                testedValue: 'integer'
-            }
-        ];
-
-    fix(data, testSchema, function(error, result){
-        t.deepEqual(error, expectedError, 'additional errors returned');
-        t.deepEqual(result, data, 'got correct result');
-    });
-});
-
-test('returns additional errors', function(t){
-    t.plan(2);
-
-    var data = [
-            123,
-            {
-                bar: {
-                    thing: 'another string',
-                    stuff: 'some stuff'
-                }
-            }
-        ],
-        expectedError = [
-            {
-                constraintName: 'type',
-                constraintValue: 'string',
-                instanceContext: '#/0',
-                resolutionScope: 'anon-schema://d0282df19787a42c749164ea965c5f9bab0e6784/#/items/0',
-                testedValue: 'integer'
-            }
+            },
+            'Bazinga'
         ],
         expectedResult = [
-            123,
+            'a string',
             {
                 bar: {
                     thing: 'another string'
@@ -129,8 +88,18 @@ test('returns additional errors', function(t){
             }
         ];
 
-    fix(data, testSchema, function(error, result){
-        t.deepEqual(error, expectedError, 'additional errors returned');
-        t.deepEqual(result, expectedResult, 'got correct result');
-    });
+    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+});
+
+test('Completely wrong data', function(t){
+    t.plan(1);
+
+    var data = {
+            'notAtAll': 'what we expected'
+        },
+        expectedResult = {
+            'notAtAll': 'what we expected'
+        };
+
+    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
 });
