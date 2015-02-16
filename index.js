@@ -1,43 +1,11 @@
 var clone = require('clone');
 
-var schema = {
-        type: 'array',
-        items: [
-            {
-                type: 'string'
-            },
-            {
-                type: 'object',
-                additionalProperties: false,
-                properties: {
-                    bar: {
-                        type: 'object',
-                        additionalProperties: false,
-                        properties: {
-                            thing: {
-                                type:'string'
-                            }
-                        }
-                    }
-                }
-            }
-        ],
-        minItems: 2,
-        maxItems: 2
-    };
-
-var data = [
-    'a string',
-    {
-        bar: {
-            thing: 'another string',
-            stuff: 'some stuff'
-        }
-    }
-];
-
 function arrayValidation(data, schema){
     var length = schema.maxItems || schema.items.length;
+
+    if(!Array.isArray(data)){
+        return data;
+    }
 
     while(data.length > length){
         data.pop();
@@ -49,6 +17,10 @@ function arrayValidation(data, schema){
 }
 
 function objectValidation(data, schema){
+    if(!data || typeof data !== 'object'){
+        return data;
+    }
+
     for(var key in data){
         if(schema.additionalProperties === false && !(key in schema.properties)){
             delete data[key];
@@ -59,20 +31,15 @@ function objectValidation(data, schema){
 }
 
 function process(data, schema){
-    if(data.type === 'array'){
-        return arrayValidation(data, schema);
-    }
-
-    if(data.type === 'object'){
-        return objectValidation(data, schema);
+    if(schema.type === 'array'){
+        arrayValidation(data, schema);
+    }else if(schema.type === 'object'){
+        objectValidation(data, schema);
     }
 
     return data;
 }
 
-module.exports = function(data, schema, callback){
-    var result = clone(data);
-
-    callback(null, process(result, schema));
+module.exports = function(data, schema){
+    return process(clone(data), schema);
 };
-
