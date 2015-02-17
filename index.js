@@ -11,12 +11,10 @@ function arrayValidation(data, schema){
         data.pop();
     }
 
-    var itemSchemas
-
     for(var i = 0; i < data.length; i++) {
-        process(data[i], 
-            Array.isArray(schema.items) ? 
-            schema.items[i] : 
+        process(data[i],
+            Array.isArray(schema.items) ?
+            schema.items[i] :
             schema.items
         );
     }
