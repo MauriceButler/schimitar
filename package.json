@@ -1,6 +1,6 @@
 {
   "name": "schimitar",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Naive schema cutter",
   "main": "index.js",
   "scripts": {
