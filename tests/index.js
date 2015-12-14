@@ -129,3 +129,15 @@ test('Completely wrong data', function(t){
 
     t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
 });
+
+test('max items', function(t){
+    t.plan(1);
+
+    var data = ['foo'],
+        expectedResult = [];
+
+    t.deepEqual(fix(data, {
+        type: 'array',
+        maxItems: 0
+    }), expectedResult, 'got correct result');
+});

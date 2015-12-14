@@ -1,7 +1,7 @@
 var clone = require('clone');
 
 function arrayValidation(data, schema){
-    var length = schema.maxItems || schema.items.length;
+    var length = 'maxItems' in schema ? schema.maxItems : schema.items.length;
 
     if(!Array.isArray(data)){
         return data;
@@ -14,9 +14,9 @@ function arrayValidation(data, schema){
     var itemSchemas
 
     for(var i = 0; i < data.length; i++) {
-        process(data[i], 
-            Array.isArray(schema.items) ? 
-            schema.items[i] : 
+        process(data[i],
+            Array.isArray(schema.items) ?
+            schema.items[i] :
             schema.items
         );
     }
