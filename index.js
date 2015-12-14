@@ -11,8 +11,6 @@ function arrayValidation(data, schema){
         data.pop();
     }
 
-    var itemSchemas
-
     for(var i = 0; i < data.length; i++) {
         process(data[i],
             Array.isArray(schema.items) ?
@@ -28,19 +26,25 @@ function objectValidation(data, schema){
     }
 
     for(var key in data){
-        if(schema.additionalProperties === false && !(key in schema.properties)){
-            delete data[key];
-        } else {
-            process(data[key], schema.properties[key]);
+        if(schema.properties){
+            if(schema.additionalProperties === false && !(key in schema.properties)){
+                delete data[key];
+            } else {
+                process(data[key], schema.properties[key]);
+            }
         }
     }
 }
 
 function process(data, schema){
-    if(schema.type === 'array'){
-        arrayValidation(data, schema);
-    }else if(schema.type === 'object'){
-        objectValidation(data, schema);
+    if(schema){
+        if(schema.type === 'array'){
+            arrayValidation(data, schema);
+        }
+
+        if(schema.type === 'object'){
+            objectValidation(data, schema);
+        }
     }
 
     return data;
