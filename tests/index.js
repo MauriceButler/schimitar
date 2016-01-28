@@ -1,5 +1,5 @@
 var test = require('tape'),
-    fix = require('../'),
+    schimitar = require('../'),
     testSchema = {
         type: 'array',
         items: [
@@ -55,7 +55,7 @@ test('Doesn\'t mess with stuff if OK', function(t){
             }
         ];
 
-    t.deepEqual(fix(data, testSchema), data, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), data, 'got correct result');
 });
 
 test('deletes additional props', function(t){
@@ -79,7 +79,7 @@ test('deletes additional props', function(t){
             }
         ];
 
-    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), expectedResult, 'got correct result');
 });
 
 test('deletes additional items', function(t){
@@ -105,7 +105,7 @@ test('deletes additional items', function(t){
             'majigger'
         ];
 
-    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), expectedResult, 'got correct result');
 });
 
 test('deletes additional items single type', function(t){
@@ -124,7 +124,7 @@ test('deletes additional items single type', function(t){
             }
         ];
 
-    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), expectedResult, 'got correct result');
 });
 
 test('Completely wrong data', function(t){
@@ -137,7 +137,7 @@ test('Completely wrong data', function(t){
             'notAtAll': 'what we expected'
         };
 
-    t.deepEqual(fix(data, testSchema), expectedResult, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), expectedResult, 'got correct result');
 });
 
 test('max items', function(t){
@@ -146,7 +146,7 @@ test('max items', function(t){
     var data = ['foo'],
         expectedResult = [];
 
-    t.deepEqual(fix(data, {
+    t.deepEqual(schimitar(data, {
         type: 'array',
         maxItems: 0
     }), expectedResult, 'got correct result');
@@ -167,5 +167,41 @@ test('allows non determined props', function(t){
             }
         ];
 
-    t.deepEqual(fix(data, testSchema), data, 'got correct result');
+    t.deepEqual(schimitar(data, testSchema), data, 'got correct result');
+});
+
+test('works with arrays with single object item', function(t){
+    t.plan(1);
+
+    var data = [
+            {
+                foo: 'bar'
+            },
+            {
+                foo: 'bar',
+                things: 'stuff'
+            },
+            {
+                foo: {
+                    bar: {
+                        things: 'stuff'
+                    }
+                }
+            }
+        ],
+        testSchema = {
+            type: 'array',
+            items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    foo: {
+                        type: 'string'
+                    }
+                }
+            },
+            maxItems: 2
+        };
+
+    t.deepEqual(schimitar(data, testSchema), [{foo:'bar'},{foo:'bar'}], 'got correct result');
 });
