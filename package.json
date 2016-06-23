@@ -18,11 +18,16 @@
   },
   "homepage": "https://github.com/MauriceButler/schimitar",
   "dependencies": {
-    "clone": "^1.0.0",
-    "jayschema": "^0.3.1",
-    "tape": "^3.5.0"
+    "clone": "^1.0.2",
+    "jayschema": "^0.3.1"
   },
   "devDependencies": {
-    "tape": "^3.5.0"
-  }
+    "tape": "^4.6.0"
+  },
+  "keywords": [
+    "schema",
+    "cut",
+    "clean",
+    "validate"
+  ]
 }
