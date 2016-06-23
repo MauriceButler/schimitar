@@ -1,6 +1,6 @@
 {
   "name": "schimitar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Naive schema cutter",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,12 @@
     "type": "git",
     "url": "https://github.com/MauriceButler/schimitar.git"
   },
-  "keywords": [],
+  "keywords": [
+    "schema",
+    "cut",
+    "clean",
+    "validate"
+  ],
   "author": "Maurice Butler <maurice.butler@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -23,11 +28,5 @@
   },
   "devDependencies": {
     "tape": "^4.6.0"
-  },
-  "keywords": [
-    "schema",
-    "cut",
-    "clean",
-    "validate"
-  ]
+  }
 }
