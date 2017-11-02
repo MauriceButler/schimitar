@@ -1,4 +1,4 @@
-var clone = require('clone');
+var clone = require('clone-deep');
 
 function arrayValidation(data, schema){
     var length = 'maxItems' in schema ? schema.maxItems : schema.items.length;

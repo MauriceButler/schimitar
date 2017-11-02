@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/MauriceButler/schimitar",
   "dependencies": {
-    "clone": "^1.0.2",
+    "clone-deep": "^1.0.0",
     "jayschema": "^0.3.1"
   },
   "devDependencies": {
