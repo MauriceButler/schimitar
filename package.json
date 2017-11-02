@@ -14,7 +14,8 @@
     "schema",
     "cut",
     "clean",
-    "validate"
+    "validate",
+    "sanitisation"
   ],
   "author": "Maurice Butler <maurice.butler@gmail.com>",
   "license": "MIT",
@@ -24,9 +25,9 @@
   "homepage": "https://github.com/MauriceButler/schimitar",
   "dependencies": {
     "clone-deep": "^1.0.0",
-    "jayschema": "^0.3.1"
+    "jayschema": "^0.3.2"
   },
   "devDependencies": {
-    "tape": "^4.6.0"
+    "tape": "^4.8.0"
   }
 }
